@@ -21,11 +21,7 @@ export default defineConfig([
     rules: {
       camelcase: 'off',
       eqeqeq: 'off',
-      'no-undef': 'off',
-      'no-redeclare': 'off',
       'no-unused-vars': 'off',
-      'no-fallthrough': 'off',
-      'no-empty': 'off',
       'no-var': 'off',
 
       // Reduce noise from stylistic strictness
