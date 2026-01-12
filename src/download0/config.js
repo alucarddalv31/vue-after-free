@@ -1,6 +1,7 @@
 var CONFIG = {
     autolapse: false, 
     autopoop: false,
+    autoclose: false
 };
 
 var payloads = [ //to be ran after jailbroken

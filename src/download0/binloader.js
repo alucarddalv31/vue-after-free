@@ -394,6 +394,7 @@ var BinLoader = {
     mmap_base: null,
     mmap_size: 0,
     entry_point: null,
+    skip_autoclose: false,
 };
 
 BinLoader.init = function(bin_data_addr, bin_size) {
@@ -471,22 +472,37 @@ BinLoader.run = function() {
         log("Thread handle: " + thr_id.toString());
         //utils.notify("Payload loaded!\nThread spawned successfully");
 
-        // Call thrd_join to wait for thread completion
-        // int thrd_join(thrd_t thr, int *res);
-        log("Waiting for thread to complete (thrd_join)...");
-        var join_ret = thrd_join(
-            thr_id,              // thrd_t thr
-            thread_result        // int *res
-        );
+        // Check if autoclose is enabled
+        if (typeof CONFIG !== 'undefined' && CONFIG.autoclose && !BinLoader.skip_autoclose) {
+            log("CONFIG.autoclose enabled - terminating current process");
 
-        if (join_ret.eq(0)) {
-            var result_val = mem.view(thread_result).getUint32(0, true);
-            log("Thread completed successfully with result: " + result_val);
+            if (!fn.getpid) fn.register(0x14, 'getpid', 'bigint');
+            if (!fn.kill) fn.register(0x25, 'kill', 'bigint');
+
+            var pid = fn.getpid();
+            var pid_num = (pid instanceof BigInt) ? pid.lo : pid;
+            log("Current PID: " + pid_num);
+            log("Sending SIGKILL to PID " + pid_num);
+
+            fn.kill(pid, new BigInt(0, 9));
         } else {
-            log("WARNING: thrd_join returned: " + join_ret.toString());
-        }
+            // Call thrd_join to wait for thread completion
+            // int thrd_join(thrd_t thr, int *res);
+            log("Waiting for thread to complete (thrd_join)...");
+            var join_ret = thrd_join(
+                thr_id,              // thrd_t thr
+                thread_result        // int *res
+            );
 
-        log("Binloader complete - thread has finished");
+            if (join_ret.eq(0)) {
+                var result_val = mem.view(thread_result).getUint32(0, true);
+                log("Thread completed successfully with result: " + result_val);
+            } else {
+                log("WARNING: thrd_join returned: " + join_ret.toString());
+            }
+
+            log("Binloader complete - thread has finished");
+        }
     } else {
         log("ERROR: thrd_create failed with return value: " + ret.toString());
         throw new Error("Failed to spawn payload thread");
@@ -567,7 +583,7 @@ function bl_read_payload_from_socket(client_sock, max_size) {
 }
 
 // Load and run payload from file
-bl_load_from_file = function(path) {
+bl_load_from_file = function(path, skip_autoclose) {
     log("Loading payload from: " + path);
 
     var payload = bl_read_file(path);
@@ -581,6 +597,12 @@ bl_load_from_file = function(path) {
     if (payload.size < 64) {
         log("ERROR: Payload too small");
         return false;
+    }
+
+    if (skip_autoclose === false) {
+        BinLoader.skip_autoclose = false;
+    } else {
+        BinLoader.skip_autoclose = true;
     }
 
     try {
@@ -655,6 +677,8 @@ bl_network_loader = function() {
         return false;
     }
 
+    BinLoader.skip_autoclose = false;
+
     try {
         BinLoader.init(payload.buf, payload.size);
         BinLoader.run();
@@ -679,10 +703,10 @@ function bin_loader_main() {
         var payload = payloads[i];
         log("Loading payload: " + payload);
         if (bl_file_exists(payload)){
-            bl_load_from_file(payload);
+            bl_load_from_file(payload, true);
         }else {
                 log(payload + " not found!")
-            
+
         }
     }   
 
@@ -703,7 +727,7 @@ function bin_loader_main() {
             }
 
             // Load from USB
-            return bl_load_from_file(usb_path);
+            return bl_load_from_file(usb_path, false);
         }
     }
 
@@ -711,7 +735,7 @@ function bin_loader_main() {
     var data_size = bl_file_exists(DATA_PAYLOAD_PATH);
     if (data_size > 0) {
         log("Found cached payload: " + DATA_PAYLOAD_PATH + " (" + data_size + " bytes)");
-        return bl_load_from_file(DATA_PAYLOAD_PATH);
+        return bl_load_from_file(DATA_PAYLOAD_PATH, false);
     }
 
     // Priority 3: Fall back to network loader

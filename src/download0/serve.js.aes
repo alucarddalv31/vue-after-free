@@ -239,9 +239,9 @@ try {
     catch(e){
             var config = [
             'var CONFIG = {',
-            '    autouserland: false, ',
             '    autolapse: false, ',
             '    autopoop: false',
+            '    autoclose: false, ',
             '};',
             '',
             'var payloads = [ //to be ran after jailbroken',
