@@ -3,7 +3,7 @@
 
 var lang = {}
 
-var detectedLocale = 'ko'//jsmaf.locale || 'en'
+var detectedLocale = jsmaf.locale || 'en'
 log('Detected locale: ' + detectedLocale)
 
 switch (detectedLocale) {
@@ -90,6 +90,153 @@ switch (detectedLocale) {
     //~ lang.loadingConfig = '設定読み込み中...'
     //~ lang.configLoaded = '設定読み込み完了'
     //~ break
+
+  case 'pt':
+    // Portuguese
+    lang.jailbreak = 'Jailbreak'
+    lang.payloadMenu = 'Menu de Payloads'
+    lang.config = 'Configuracao'
+    lang.exit = 'Sair'
+    lang.back = 'Voltar'
+    lang.autoLapse = 'Auto Lapse'
+    lang.autoPoop = 'Auto Poop'
+    lang.autoClose = 'Fechar Auto'
+    lang.totalAttempts = 'Total de Tentativas: '
+    lang.successes = 'Sucessos: '
+    lang.failures = 'Falhas: '
+    lang.successRate = 'Taxa de Sucesso: '
+    lang.failureRate = 'Taxa de Falha: '
+    lang.loadingMainMenu = 'Carregando menu principal...'
+    lang.mainMenuLoaded = 'Menu principal carregado'
+    lang.loadingConfig = 'Carregando configuracao...'
+    lang.configLoaded = 'Configuracao carregada'
+    break
+
+  case 'fr':
+    // French
+    lang.jailbreak = 'Jailbreak'
+    lang.payloadMenu = 'Menu Payload'
+    lang.config = 'Configuration'
+    lang.exit = 'Quitter'
+    lang.back = 'Retour'
+    lang.autoLapse = 'Auto Lapse'
+    lang.autoPoop = 'Auto Poop'
+    lang.autoClose = 'Fermer Auto'
+    lang.totalAttempts = 'Tentatives Totales: '
+    lang.successes = 'Succes: '
+    lang.failures = 'Echecs: '
+    lang.successRate = 'Taux de Succes: '
+    lang.failureRate = 'Taux Echec: '
+    lang.loadingMainMenu = 'Chargement du menu principal...'
+    lang.mainMenuLoaded = 'Menu principal charge'
+    lang.loadingConfig = 'Chargement de la configuration...'
+    lang.configLoaded = 'Configuration chargee'
+    break
+
+  case 'de':
+    // German
+    lang.jailbreak = 'Jailbreak'
+    lang.payloadMenu = 'Payload Menu'
+    lang.config = 'Einstellungen'
+    lang.exit = 'Beenden'
+    lang.back = 'Zuruck'
+    lang.autoLapse = 'Auto Lapse'
+    lang.autoPoop = 'Auto Poop'
+    lang.autoClose = 'Auto Schliessen'
+    lang.totalAttempts = 'Gesamtversuche: '
+    lang.successes = 'Erfolge: '
+    lang.failures = 'Fehlschlage: '
+    lang.successRate = 'Erfolgsrate: '
+    lang.failureRate = 'Fehlerrate: '
+    lang.loadingMainMenu = 'Hauptmenu wird geladen...'
+    lang.mainMenuLoaded = 'Hauptmenu geladen'
+    lang.loadingConfig = 'Einstellungen werden geladen...'
+    lang.configLoaded = 'Einstellungen geladen'
+    break
+
+  case 'it':
+    // Italian
+    lang.jailbreak = 'Jailbreak'
+    lang.payloadMenu = 'Menu Payload'
+    lang.config = 'Configurazione'
+    lang.exit = 'Esci'
+    lang.back = 'Indietro'
+    lang.autoLapse = 'Auto Lapse'
+    lang.autoPoop = 'Auto Poop'
+    lang.autoClose = 'Chiudi Auto'
+    lang.totalAttempts = 'Tentativi Totali: '
+    lang.successes = 'Successi: '
+    lang.failures = 'Fallimenti: '
+    lang.successRate = 'Tasso di Successo: '
+    lang.failureRate = 'Tasso di Fallimento: '
+    lang.loadingMainMenu = 'Caricamento menu principale...'
+    lang.mainMenuLoaded = 'Menu principale caricato'
+    lang.loadingConfig = 'Caricamento configurazione...'
+    lang.configLoaded = 'Configurazione caricata'
+    break
+
+  case 'nl':
+    // Dutch
+    lang.jailbreak = 'Jailbreak'
+    lang.payloadMenu = 'Payload Menu'
+    lang.config = 'Instellingen'
+    lang.exit = 'Afsluiten'
+    lang.back = 'Terug'
+    lang.autoLapse = 'Auto Lapse'
+    lang.autoPoop = 'Auto Poop'
+    lang.autoClose = 'Auto Sluiten'
+    lang.totalAttempts = 'Totaal Pogingen: '
+    lang.successes = 'Successen: '
+    lang.failures = 'Mislukkingen: '
+    lang.successRate = 'Succespercentage: '
+    lang.failureRate = 'Faalpercentage: '
+    lang.loadingMainMenu = 'Hoofdmenu laden...'
+    lang.mainMenuLoaded = 'Hoofdmenu geladen'
+    lang.loadingConfig = 'Instellingen laden...'
+    lang.configLoaded = 'Instellingen geladen'
+    break
+
+  case 'pl':
+    // Polish
+    lang.jailbreak = 'Jailbreak'
+    lang.payloadMenu = 'Menu Payload'
+    lang.config = 'Konfiguracja'
+    lang.exit = 'Wyjscie'
+    lang.back = 'Wstecz'
+    lang.autoLapse = 'Auto Lapse'
+    lang.autoPoop = 'Auto Poop'
+    lang.autoClose = 'Auto Zamknij'
+    lang.totalAttempts = 'Laczna Liczba Prob: '
+    lang.successes = 'Sukcesy: '
+    lang.failures = 'Niepowodzenia: '
+    lang.successRate = 'Wskaznik Sukcesu: '
+    lang.failureRate = 'Wskaznik Bledow: '
+    lang.loadingMainMenu = 'Ladowanie menu glownego...'
+    lang.mainMenuLoaded = 'Menu glowne zaladowane'
+    lang.loadingConfig = 'Ladowanie konfiguracji...'
+    lang.configLoaded = 'Konfiguracja zaladowana'
+    break
+
+  case 'tr':
+    // Turkish
+    lang.jailbreak = 'Jailbreak'
+    lang.payloadMenu = 'Payload Menusu'
+    lang.config = 'Ayarlar'
+    lang.exit = 'Cikis'
+    lang.back = 'Geri'
+    lang.autoLapse = 'Auto Lapse'
+    lang.autoPoop = 'Auto Poop'
+    lang.autoClose = 'Otomatik Kapat'
+    lang.totalAttempts = 'Toplam Deneme: '
+    lang.successes = 'Basarilar: '
+    lang.failures = 'Basarisizliklar: '
+    lang.successRate = 'Basari Orani: '
+    lang.failureRate = 'Basarisizlik Orani: '
+    lang.loadingMainMenu = 'Ana menu yukleniyor...'
+    lang.mainMenuLoaded = 'Ana menu yuklendi'
+    lang.loadingConfig = 'Ayarlar yukleniyor...'
+    lang.configLoaded = 'Ayarlar yuklendi'
+    break
 
   case 'en':
   default:
