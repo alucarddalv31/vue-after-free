@@ -84,9 +84,10 @@ import { libc_addr } from 'download0/userland'
   jsmaf.root.children.push(logo)
 
   const title = new jsmaf.Text()
-  title.text = 'Payload Menu'
-  title.x = 860
+  title.text = lang.payloadMenu
+  title.x = 880
   title.y = 120
+  title.style = 'title'
   jsmaf.root.children.push(title)
 
   fn.register(0x05, 'open_sys', ['bigint', 'bigint', 'bigint'], 'bigint')

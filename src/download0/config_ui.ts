@@ -79,8 +79,8 @@ if (typeof lang === 'undefined') {
 
   const title = new jsmaf.Text()
   title.text = lang.config
-  title.x = 20
-  title.y = 40
+  title.x = 910
+  title.y = 120
   title.style = 'title'
   jsmaf.root.children.push(title)
 
@@ -141,10 +141,9 @@ if (typeof lang === 'undefined') {
 
     const btnText = new jsmaf.Text()
     btnText.text = configOption.label
-    btnText.x = btnX + 20
-    btnText.y = btnY + 20
+    btnText.x = btnX + 30
+    btnText.y = btnY + 28
     btnText.style = 'white'
-    jsmaf.root.children.push(btnText)
     buttonTexts.push(btnText)
     jsmaf.root.children.push(btnText)
 
