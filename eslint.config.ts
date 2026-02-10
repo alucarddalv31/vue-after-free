@@ -31,9 +31,9 @@ export default defineConfig([
       '@stylistic/quote-props': 'off',
       '@stylistic/quotes': 'off',
 
-      'quote-props' : ['error', 'consistent-as-needed'],
+      'quote-props': ['error', 'consistent-as-needed'],
 
-      camelcase: 'off',
+      "camelcase": 'off',
       'no-unused-vars': 'off', // jsmaf, log, psn, all defined globally
       'no-var': 'off',
       'no-undef': 'off',
