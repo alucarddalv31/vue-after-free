@@ -615,7 +615,9 @@ export function binloader_init () {
         show_success()
         log('Waiting 3 seconds...')
         const delay_start = Date.now()
-        while (Date.now() - delay_start < 3000) {}
+        while (Date.now() - delay_start < 3000) {
+          undefined // just a no-op
+        }
       }
 
       BinLoader.run()
